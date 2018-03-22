@@ -27,13 +27,17 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     qcustomplot.cpp \
-    datatable.cpp
+    datatable.cpp \
+    runge.cpp \
+    interpolator.cpp
 
 HEADERS += \
         mainwindow.h \
     qcustomplot.h \
     dataholder.h \
-    datatable.h
+    datatable.h \
+    runge.h \
+    interpolator.h
 
 FORMS += \
         mainwindow.ui

@@ -62,3 +62,18 @@ const QVector<double>& DataTable::getHeaderRow() const
 {
     return headerRow;
 }
+
+void DataTable::addRow(const QVector<double> row)
+{
+    values.append(row);
+}
+
+void DataTable::removeLastRow()
+{
+    values.pop_back();
+}
+
+void DataTable::clear()
+{
+    values.clear();
+}

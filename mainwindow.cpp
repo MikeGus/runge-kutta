@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "dataholder.h"
 #include "datatable.h"
+#include "runge.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,6 +12,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->uGraphicsView->addGraph();
     ui->iGraphicsView->addGraph();
     ui->rGraphicsView->addGraph();
+
+    ui->uGraphicsView->xAxis->setLabel("t, с");
+    ui->uGraphicsView->yAxis->setLabel("U, В");
+
+    ui->iGraphicsView->xAxis->setLabel("t, с");
+    ui->iGraphicsView->yAxis->setLabel("I, А");
+
+    ui->rGraphicsView->xAxis->setLabel("t, с");
+    ui->rGraphicsView->yAxis->setLabel("R, Ом");
 }
 
 MainWindow::~MainWindow()
@@ -34,5 +44,25 @@ void MainWindow::on_calculatePushButton_clicked()
     DataTable tableVoltage("data/tableVoltage.txt");
     DataTable tableConductivity("data/tableConductivity.txt");
     DataTable tableITM("data/tableITM.txt");
+
+    Runge solver(data, tableVoltage, tableConductivity, tableITM);
+    DataTable result(solver.calculate(0, 300e-6, 1e-6));
+
+    QVector<double> time;
+    for (double t = 0; t < 300e-6; t += 1e-6) {
+        time.push_back(t);
+    }
+
+    ui->iGraphicsView->graph(0)->addData(time, result.getRow(0));
+    ui->uGraphicsView->graph(0)->addData(time, result.getRow(1));
+    ui->rGraphicsView->graph(0)->addData(time, result.getRow(2));
+
+    ui->iGraphicsView->rescaleAxes();
+    ui->uGraphicsView->rescaleAxes();
+    ui->rGraphicsView->rescaleAxes();
+
+    ui->iGraphicsView->replot();
+    ui->uGraphicsView->replot();
+    ui->rGraphicsView->replot();
 
 }

@@ -16,6 +16,10 @@ public:
     const QVector<double>& getHeaderColumn() const;
     const QVector<double>& getHeaderRow() const;
 
+    void addRow(const QVector<double> row);
+    void removeLastRow();
+    void clear();
+
 private:
     QVector<QVector<double>> values;
     QVector<double> headerColumn;

@@ -15,14 +15,14 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
-     <widget class="QCustomPlot" name="iGraphicsView"/>
+    <item row="0" column="1">
+     <widget class="QCustomPlot" name="rGraphicsView"/>
     </item>
     <item row="1" column="1">
      <widget class="QCustomPlot" name="uGraphicsView"/>
     </item>
-    <item row="0" column="1">
-     <widget class="QCustomPlot" name="rGraphicsView"/>
+    <item row="1" column="0">
+     <widget class="QCustomPlot" name="iGraphicsView"/>
     </item>
     <item row="0" column="0">
      <widget class="QGroupBox" name="formGroupBox">
@@ -33,7 +33,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="rkLabel">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;R&lt;span style=&quot; vertical-align:sub;&quot;&gt;к&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;R&lt;span style=&quot; vertical-align:sub;&quot;&gt;к&lt;/span&gt;, Ом&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -42,12 +42,15 @@
          <property name="decimals">
           <number>5</number>
          </property>
+         <property name="minimum">
+          <double>0.200000000000000</double>
+         </property>
         </widget>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="lkLabel">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;L&lt;span style=&quot; vertical-align:sub;&quot;&gt;к&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;L&lt;span style=&quot; vertical-align:sub;&quot;&gt;к&lt;/span&gt;, Гн&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -56,40 +59,58 @@
          <property name="decimals">
           <number>5</number>
          </property>
+         <property name="value">
+          <double>0.000060000000000</double>
+         </property>
         </widget>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="ckLabel">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;C&lt;span style=&quot; vertical-align:sub;&quot;&gt;к&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;C&lt;span style=&quot; vertical-align:sub;&quot;&gt;к&lt;/span&gt;, Ф&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
         <widget class="QDoubleSpinBox" name="ckDoubleSpinBox">
+         <property name="toolTipDuration">
+          <number>-1</number>
+         </property>
          <property name="decimals">
           <number>5</number>
+         </property>
+         <property name="value">
+          <double>0.000150000000000</double>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="uc0Label">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;U&lt;span style=&quot; vertical-align:sub;&quot;&gt;с0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;U&lt;span style=&quot; vertical-align:sub;&quot;&gt;с0&lt;/span&gt;, В&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
        <item row="4" column="1">
         <widget class="QDoubleSpinBox" name="uc0DoubleSpinBox">
+         <property name="toolTipDuration">
+          <number>-1</number>
+         </property>
          <property name="decimals">
           <number>5</number>
+         </property>
+         <property name="maximum">
+          <double>5000.000000000000000</double>
+         </property>
+         <property name="value">
+          <double>3000.000000000000000</double>
          </property>
         </widget>
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="i0Label">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;I&lt;span style=&quot; vertical-align:sub;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;I&lt;span style=&quot; vertical-align:sub;&quot;&gt;0&lt;/span&gt;, А&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -103,7 +124,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="rLabel">
          <property name="text">
-          <string>R</string>
+          <string>R, м</string>
          </property>
         </widget>
        </item>
@@ -111,6 +132,9 @@
         <widget class="QDoubleSpinBox" name="rDoubleSpinBox">
          <property name="decimals">
           <number>5</number>
+         </property>
+         <property name="value">
+          <double>0.350000000000000</double>
          </property>
         </widget>
        </item>
@@ -126,6 +150,9 @@
          <property name="decimals">
           <number>5</number>
          </property>
+         <property name="value">
+          <double>0.500000000000000</double>
+         </property>
         </widget>
        </item>
        <item row="8" column="0">
@@ -140,12 +167,18 @@
          <property name="decimals">
           <number>5</number>
          </property>
+         <property name="maximum">
+          <double>5000.000000000000000</double>
+         </property>
+         <property name="value">
+          <double>300.000000000000000</double>
+         </property>
         </widget>
        </item>
        <item row="9" column="0">
         <widget class="QLabel" name="lLabel">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;l&lt;span style=&quot; vertical-align:sub;&quot;&gt;э&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;l&lt;span style=&quot; vertical-align:sub;&quot;&gt;э&lt;/span&gt;, м&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
@@ -153,6 +186,9 @@
         <widget class="QDoubleSpinBox" name="lDoubleSpinBox">
          <property name="decimals">
           <number>5</number>
+         </property>
+         <property name="value">
+          <double>12.000000000000000</double>
          </property>
         </widget>
        </item>
