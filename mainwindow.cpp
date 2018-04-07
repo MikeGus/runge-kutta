@@ -45,11 +45,14 @@ void MainWindow::on_calculatePushButton_clicked()
     DataTable tableConductivity("data/tableConductivity.txt");
     DataTable tableITM("data/tableITM.txt");
 
+    double max_t = 400e-6;
+    double step = 1e-6;
+
     Runge solver(data, tableVoltage, tableConductivity, tableITM);
-    DataTable result(solver.calculate(0, 300e-6, 1e-6));
+    DataTable result(solver.calculate(0, max_t, step));
 
     QVector<double> time;
-    for (double t = 0; t < 300e-6; t += 1e-6) {
+    for (double t = 0; t < max_t; t += step) {
         time.push_back(t);
     }
 
