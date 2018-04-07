@@ -45,7 +45,7 @@ void MainWindow::on_calculatePushButton_clicked()
     DataTable tableConductivity("data/tableConductivity.txt");
     DataTable tableITM("data/tableITM.txt");
 
-    double max_t = 400e-6;
+    double max_t = 300e-6;
     double step = 1e-6;
 
     Runge solver(data, tableVoltage, tableConductivity, tableITM);
@@ -67,5 +67,4 @@ void MainWindow::on_calculatePushButton_clicked()
     ui->iGraphicsView->replot();
     ui->uGraphicsView->replot();
     ui->rGraphicsView->replot();
-
 }

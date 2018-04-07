@@ -1,6 +1,13 @@
 #include "datatable.h"
 #include <QFile>
 
+DataTable::DataTable(const size_t size, const size_t number): values(size) {
+    for (auto& row : values) {
+        row.resize(number);
+    }
+}
+
+
 DataTable::DataTable(const QString &path)
 {
     QFile f(path);
@@ -44,6 +51,11 @@ const QVector<double>& DataTable::getRow(const size_t row) const
     return values[row];
 }
 
+
+QVector<double>& DataTable::getRow(const size_t row) {
+    return values[row];
+}
+
 const QVector<double> DataTable::getColumn(const size_t column) const
 {
     QVector<double> result;
@@ -76,4 +88,8 @@ void DataTable::removeLastRow()
 void DataTable::clear()
 {
     values.clear();
+}
+
+void DataTable::setRow(const QVector<double> newRow, const size_t row) {
+    values[row] = newRow;
 }

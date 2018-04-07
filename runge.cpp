@@ -8,12 +8,14 @@
 
 Runge::Runge(const DataHolder &constants, const DataTable &tblVol,
              const DataTable &tblCond, const DataTable &tblITM):
-    data(constants), tableVoltage(tblVol), tableConductivity(tblCond)
+    data(constants), tableVoltage(tblVol), tableConductivity(tblCond),
+    tableIT(2), tableIM(2)
 {
-    tableIT.addRow(tblITM.getRow(0));
-    tableIT.addRow(tblITM.getRow(1));
-    tableIM.addRow(tblITM.getRow(0));
-    tableIM.addRow(tblITM.getRow(2));
+    tableIT.setRow(tblITM.getColumn(0), 0);
+    tableIT.setRow(tblITM.getColumn(1), 1);
+
+    tableIM.setRow(tblITM.getColumn(0), 0);
+    tableIM.setRow(tblITM.getColumn(2), 1);
 }
 
 
@@ -32,7 +34,9 @@ double Runge::phi(double x, double u, double v)
 
 double Runge::calcRp(double I)
 {
-    double p = calcP(&Runge::P, I, 0, 30);
+    double p = calcP(&Runge::P, I, 0, 30.0);
+//    qDebug() << "pressure: " << p;
+
     return data.l / (2 * M_PI * integral(&Runge::sigma, 0, data.R, I, p));
 }
 
@@ -48,6 +52,7 @@ double Runge::integral(Func func, double a, double b, double I, double p)
 double Runge::calcP(Func funcP, double I, double a, double b)
 {
     double p_t = data.P0 * data.R * data.R * 7242 / 2 / data.Tn;
+
     double c = (a + b) / 2;
     while (fabs(b - a) >= EPS + EPS * fabs(c)) {
         if ((p_t - (this->*funcP)(I, a)) * (p_t - (this->*funcP)(I, c)) < 0) {
@@ -81,22 +86,22 @@ double Runge::P(double I, double p)
 
 double Runge::sigma(double T, double p)
 {
-    return Interpolator::multiInterpolate(T, p, 3, 2, tableVoltage);
+    return Interpolator::multiInterpolate(T, p, 3, 2, tableConductivity);
 }
 
-DataTable Runge::calculate(double timeBegin, double timeEnd, double th)
-{
+DataTable Runge::calculate(double timeBegin, double timeEnd, double th) {
     double yn = data.I0;
     double zn = data.UC0;
     QVector<double> I;
     QVector<double> U;
     QVector<double> R;
 
-    for (double time = timeBegin; time < timeEnd; time += th)
-    {
+    for (double time = timeBegin; time < timeEnd; time += th) {
+        double Rp = calcRp(yn);
+
         I << yn;
         U << zn;
-        R << calcRp(yn);
+        R << Rp;
 
         double k1 = f(time, yn, zn);
         double p1 = phi(time, yn, zn);
@@ -110,7 +115,7 @@ DataTable Runge::calculate(double timeBegin, double timeEnd, double th)
         yn += th / 6. * (k1 + 2 * k2 + 2 * k3 + k4);
         zn += th / 6. * (p1 + 2 * p2 + 2 * p3 + p4);
 
-        qDebug() << time;
+        qDebug() << time << ' ' << yn << ' ' << zn << ' ' << Rp;
     }
 
     DataTable table;

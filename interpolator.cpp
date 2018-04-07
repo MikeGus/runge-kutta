@@ -1,5 +1,6 @@
 #include "interpolator.h"
 #include <cmath>
+#include <QDebug>
 
 int Interpolator::findX(const QVector<double>& arr, double x)
 {
@@ -33,22 +34,21 @@ int Interpolator::findX(const QVector<double>& arr, double x)
 DataTable Interpolator::getPolimoneTable(const DataTable& configTable)
 {
     int n = qMin(configTable.getRow(0).size(), configTable.getRow(1).size());
+    DataTable polinomeTable(2);
 
-    QVector<double> x(configTable.getRow(0));
-    QVector<double> y(configTable.getRow(1));
+    polinomeTable.setRow(configTable.getRow(0), 0);
+    polinomeTable.setRow(configTable.getRow(1), 1);
 
     double dx = 0, dy = 0;
-    for (int i = 1; i < n; ++i) {
-        dx = x[0] - x[i];
-        for (int j = n - 1; j >= i; --j) {
-            dy = y[j - 1] - y[j];
-            y[j] = dy / dx;
+    for (int i = 1; i < n; i++) {
+        dx = polinomeTable.getRow(0)[0] - polinomeTable.getRow(0)[i];
+
+        for (int j = n - 1; j >= i; j--) {
+            dy = polinomeTable.getRow(1)[j - 1] - polinomeTable.getRow(1)[j];
+            polinomeTable.getRow(1)[j] = dy / dx;
         }
     }
 
-    DataTable polinomeTable;
-    polinomeTable.addRow(x);
-    polinomeTable.addRow(y);
     return polinomeTable;
 }
 
@@ -70,7 +70,6 @@ double Interpolator::polinome(double x, const DataTable& table)
 double Interpolator::interpolate(double x, int s,
                                  const DataTable& interpolTable)
 {
-    double y = 0;
     int n = qMin(interpolTable.getRow(0).size(),
                  interpolTable.getRow(1).size());
     int pos = findX(interpolTable.getRow(0), x);
@@ -83,43 +82,32 @@ double Interpolator::interpolate(double x, int s,
         pos -= floor((s + 1) / 2.0) - 1; /*usual value*/
     }
 
-    QVector<double> first;
-    QVector<double> second;
-
+    DataTable configTable(2, s + 1);
     for (int i = 0; i < s + 1; i++) {
-        first.append(interpolTable.getRow(0)[pos + i]);
-        second.append(interpolTable.getRow(1)[pos + i]);
+        configTable.getRow(0)[i] = interpolTable.getRow(0)[pos + i];
+        configTable.getRow(1)[i] = interpolTable.getRow(1)[pos + i];
     }
 
-    DataTable configTable;
-    configTable.addRow(first);
-    configTable.addRow(second);
-
+    // таблица для вычисления полинома
     DataTable polinomeTable = getPolimoneTable(configTable);
-    y = polinome(x, polinomeTable);
-
-    return y;
+    return polinome(x, polinomeTable);
 }
 
 
 double Interpolator::multiInterpolate(double x, double y, int sx, int sy, \
                                       const DataTable& tableXYZ)
 {
-    DataTable interpolTable;
-    interpolTable.addRow(tableXYZ.getHeaderRow());
+    DataTable interpolTable(2);
+    interpolTable.setRow(tableXYZ.getHeaderRow(), 0);
 
     QVector<double> ArrZ;
     int n = tableXYZ.getHeaderColumn().size();
     for (int i = 0; i < n; i++) {
-        interpolTable.addRow(tableXYZ.getRow(i));
+        interpolTable.setRow(tableXYZ.getRow(i), 1);
         ArrZ << interpolate(y, sy, interpolTable);
-        interpolTable.removeLastRow();
     }
 
-    interpolTable.clear();
-    interpolTable.addRow(tableXYZ.getHeaderColumn());
-    interpolTable.addRow(ArrZ);
-    double z = interpolate(x, sx, interpolTable);
-
-    return z;
+    interpolTable.setRow(tableXYZ.getHeaderColumn(), 0);
+    interpolTable.setRow(ArrZ, 1);
+    return interpolate(x, sx, interpolTable);
 }
