@@ -42,10 +42,23 @@ double Runge::calcRp(double I)
 
 double Runge::integral(Func func, double a, double b, double I, double p)
 {
-    double H = (b - a) / 6;
-    double c = (a + b) / 2;
-    double S = (this->*func)(T(I, a), p) * a + (this->*func)(T(I, b), p) * b
-            + 4 * (this->*func)(T(I, c), p) * c;
+    int intervals = 10;
+
+    double first = a;
+    double h = (b - a) / intervals;
+    double H = h / 6;
+    double second = a + h;
+    double S = 0;
+    for (int i = 0; i < intervals; ++i) {
+        double middle = (first + second) / 2;
+
+        S += (this->*func)(T(I, first), p) * first
+                + (this->*func)(T(I, second), p) * second
+                + 4 * (this->*func)(T(I, middle), p) * middle;
+
+        first += h;
+        second +=h;
+    }
     return S * H;
 }
 
